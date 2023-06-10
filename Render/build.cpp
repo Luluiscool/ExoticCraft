@@ -26,11 +26,4 @@ RayCollision PlaceBlock(CUBE cubes[MAXCUBE], Player PLAYER)
     }
 
     return CurrentHit;
-
-    // cubes[BlocksLength].scale = (float3) {2.0f, 2.0f, 2.0f};
-
-    // cubes[BlocksLength].color = (float3) { 255.0f, 0.0f, 255.0f };
 }
-
-// TO COMPLETE: 
-// FIX THE RAY CAST ISSUE
