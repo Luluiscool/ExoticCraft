@@ -31,20 +31,6 @@ struct CUBE
     }
 };
 
-// struct InteractBound
-// {
-//     float3 pos;
-//     float3 scale = (float3) {1, 1, 1};
-//     bool active;
-
-//     // Render the projection
-//     void RenderProjection(void)
-//     {
-//         BoundingBox bound = { (pos - (scale * 0.5f)).V(), (pos + (scale * 0.5f)).V() };
-//         DrawBoundingBox(bound, WHITE);
-//     }
-// };
-
 const float3 Gravity = (float3) { 0.0f, -0.05f, 0.0f };
 const float3 Friction = (float3) { 0.8f, 0.8f, 0.8f };
 
