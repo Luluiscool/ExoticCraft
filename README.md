@@ -3,6 +3,7 @@
 ### This project is made in `C++` and uses [Raylib](https://raylib.com) for rendering
 ### How to download
 * Clone the repository
+* You must have installed Raylib header files from [raylib.com](https://raylib.com)
 * Run the `run.cmd` file. if it shows a warning, click on `More info` then click `Run anyway`
 * Or alternatively you could run the command `mingw32-make main` or `make main`
 ### NOTE: This project is in developement and has many bugs, Raycast has not work sometimes on block placement / breaking
