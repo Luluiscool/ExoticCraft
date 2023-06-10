@@ -38,10 +38,6 @@ void Loop(void)
 {
     // Player movement
 
-    // PLAYER.ANGLEX = GetMouseDelta().x * 0.003f;
-    // PLAYER.ANGLEY = GetMouseDelta().y * 0.003f;
-    
-
     CameraYaw(&PLAYER.CAM, -GetMouseDelta().x * 0.001f, false);
     CameraPitch(&PLAYER.CAM, -GetMouseDelta().y * 0.001f, true, false, false);
 
@@ -103,47 +99,14 @@ void Loop(void)
     
 
     Vector3 Direction = ((normalized3(RVEC3({ Forward.x + Right.x, 1.0f, Forward.z + Right.z }))) * PLAYER.SPEED).V();
-    // if(RVEC3(Direction).length() > 0.0f)
-    // {
-        PLAYER.pos = (float3) { PLAYER.pos.x + Direction.x, PLAYER.pos.y, PLAYER.pos.z + Direction.z };
+    PLAYER.pos = (float3) { PLAYER.pos.x + Direction.x, PLAYER.pos.y, PLAYER.pos.z + Direction.z };
 
-        if(PLAYER.OnGround && IsKeyDown(KEY_SPACE))
-        {
-            PLAYER.accelerate((float3) { 0.0f, 0.75f, 0.0f });
-        }
-        else
-        {
-            // PLAYER.oldpos = PLAYER.pos;
-        }
+    if(PLAYER.OnGround && IsKeyDown(KEY_SPACE))
+    {
+        PLAYER.accelerate((float3) { 0.0f, 0.75f, 0.0f });
+    }
 
-        PLAYER.CAM.target = (Vector3) { PLAYER.CAM.target.x + Direction.x, PLAYER.CAM.target.y, PLAYER.CAM.target.z + Direction.z };
-    // }
-
-    // if(IsKeyDown(KEY_LEFT_SHIFT))
-    // {
-    //     PLAYER.CAM.position.y -= 0.1f;
-    //     PLAYER.CAM.target.y -= 0.1f;
-    // }
-    
-    // if(IsKeyDown(KEY_E))
-    // {
-    //     PLAYER.CAM.position.y += 0.1f;
-    //     PLAYER.CAM.target.y += 0.1f;
-    // }
-
-    // if(GetKeyPressed() == KEY_Q)
-    // {
-    //     Spectator = !Spectator;
-    // }
-
-    // PLAYER.pos = RVEC3(PLAYER.CAM.position);
-
-    // if(GetKeyPressed() == KEY_SPACE)
-    // {
-        
-    // }
-
-    // PLAYER.NORMDIR = (float3) { cosf(PLAYER.ANGLEX), sinf(PLAYER.ANGLEX),  cosf(PLAYER.ANGLEY)};
+    PLAYER.CAM.target = (Vector3) { PLAYER.CAM.target.x + Direction.x, PLAYER.CAM.target.y, PLAYER.CAM.target.z + Direction.z };
 
     Bound = PlaceBlock(cubes, PLAYER);
 
