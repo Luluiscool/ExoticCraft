@@ -28,5 +28,3 @@ void GenerateWorld(CUBE cubes[MAXCUBE])
         }
     }
 }
-
-// FIX THE ISSUE OF POINTERs
