@@ -6,7 +6,7 @@
 * You must have installed Raylib header files from [raylib.com](https://raylib.com)
 * Run the `run.cmd` file. if it shows a warning, click on `More info` then click `Run anyway`
 * Or alternatively you could run the command `mingw32-make main` or `make main`
-### NOTE: This project is in developement and has many bugs, Raycast has not work sometimes on block placement / breaking
+### NOTE: This project is in developement and has many bugs, Raycast does not work sometimes on block placement / breaking
 ### I have no intension of making it like just Minecraft, this project is intended to simulate Redstone, or rather "Computation Redstone"
 ## Controls
 * `W` `A` `S` `D` to more
