@@ -9,7 +9,7 @@
 ### NOTE: This project is in developement and has many bugs, Raycast does not work sometimes on block placement / breaking
 ### I have no intension of making it like just Minecraft, this project is intended to simulate Redstone, or rather "Computation Redstone"
 ## Controls
-* `W` `A` `S` `D` to more
+* `W` `A` `S` `D` to move
 * `Q` To toggle Spectator mode
 * `Space` To jump / fly up in Spectator mode
 * `Shift` To sneak / fly down in Spectator mode
