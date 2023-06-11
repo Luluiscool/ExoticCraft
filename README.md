@@ -11,8 +11,7 @@
 ## Controls
 * `W` `A` `S` `D` to more
 * `Q` To toggle Spectator mode
-* `E` To fly up in Spectator mode
-* `Space` To jump
+* `Space` To jump / fly up in Spectator mode
 * `Shift` To sneak / fly down in Spectator mode
 * `Left Click`  To break Block
 * `Right Click` To place block
