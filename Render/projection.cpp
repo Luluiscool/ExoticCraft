@@ -1,7 +1,6 @@
-#include <iostream>
 #include <raylib.h>
 #include "../vector.cpp"
-#define MAXCUBE 1000
+#define MAXCUBE 10000
 
 int BlocksLength = 0;
 
@@ -25,9 +24,7 @@ struct CUBE
     // Render the projection
     void RenderProjection(void)
     {
-        // BoundingBox bound = { (pos - (scale * 0.5f)).V(), (pos + (scale * 0.5f)).V() };
         DrawCubeV(pos.V(), scale.V(), (Color) {(unsigned char)color.x, (unsigned char)color.y, (unsigned char)color.z, 255});
-        // DrawBoundingBox(bound, WHITE);
     }
 };
 
@@ -52,6 +49,13 @@ struct Player
     void RenderProjection(void)
     {
         DrawCubeV(pos.V(), scale.V(), WHITE);
+    }
+
+    // Get bounding box
+    
+    BoundingBox GetBoundingBox(void)
+    {
+        return (BoundingBox) {(pos - (scale * 0.5f)).V(), (pos + (scale * 0.5f)).V()};
     }
 
     void update(float dt, bool IsSpectator)
@@ -111,3 +115,8 @@ struct Player
         }
     }
 };
+
+Color ToRenderColor(float3 color)
+{
+    return (Color) { (unsigned char)color.x, (unsigned char)color.y, (unsigned char)color.z, 255};
+}
