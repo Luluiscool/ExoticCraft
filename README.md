@@ -7,7 +7,7 @@
 * Run the `run.cmd` file. if it shows a warning, click on `More info` then click `Run anyway`
 * Or alternatively you could run the command `mingw32-make main` or `make main`
 ### Running the game
-* Compiling the program, a `main.exe` will be created in the same directory, run it.
+* After compiling the program, a `main.exe` file will be created in the same directory, run it.
 ### NOTE: This project is in developement and has many bugs, Raycast does not work sometimes on block placement / breaking
 ### I have no intension of making it like just Minecraft, this project is intended to simulate Redstone, or rather "Computation Redstone"
 ## Controls
