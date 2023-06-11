@@ -16,7 +16,7 @@ int Tick = 0.0f;
 Shader shader;
 
 int main () {
-    InitWindow(resolution.x, resolution.y, "ExoticCraft v0.0.1 Indev");
+    InitWindow(resolution.x, resolution.y, "ExoticCraft v0.0.2 Indev");
 
     SetConfigFlags(FLAG_MSAA_4X_HINT);
     SetTargetFPS(60);
@@ -62,6 +62,27 @@ int main () {
             // Drawing the crosshair
 
             DrawText("+", center.x, center.y, 30, WHITE);
+
+            // Drawing Inventory
+
+            float2 hotbarLeftPosition = (float2) { center.x - (4.5f * 50.0f), resolution.y - 50.0f };
+            for(int i = 0; i < 9; i ++)
+            {
+                float2 hotbarBoxPosition = hotbarLeftPosition + (float2) {((float)i * 50.0f), 0.0f};
+
+                DrawRectangle(hotbarBoxPosition.x, hotbarBoxPosition.y, 50, 50, ToRenderColor(inventory.GetBlockData(i).Color));
+
+                if(inventory.selection != i)
+                {
+                    DrawRectangleLines(hotbarBoxPosition.x, hotbarBoxPosition.y, 50, 50, (Color) { LIGHTGRAY.r, LIGHTGRAY.g, LIGHTGRAY.b, 127});
+                }
+                
+                else
+                {
+                    DrawRectangleLines(hotbarBoxPosition.x, hotbarBoxPosition.y, 50, 50, WHITE);
+                }
+                
+            }
 
         EndDrawing();
     }
