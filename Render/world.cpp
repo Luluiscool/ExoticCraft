@@ -1,7 +1,7 @@
 void GenerateWorld(CUBE cubes[MAXCUBE])
 {
-    const int MAXX = 31;
-    const int MAXY = 31;
+    const int MAXX = 50;
+    const int MAXY = 50;
 
     BlocksLength = MAXX * MAXY;
 
