@@ -1,13 +1,18 @@
 #include <iostream>
+
 #include "projection.cpp"
-#include <rcamera.h>
 #include "world.cpp"
 #include "build.cpp"
+#include "inventory.cpp"
+
+#include <rcamera.h>
 
 Player PLAYER = { 0 };
 bool Spectator = false;
 
 RayCollision Bound;
+
+Inventory inventory;
 
 
 CUBE cubes[MAXCUBE];
@@ -66,18 +71,11 @@ void Loop(void)
         Right = (RVEC3(GetCameraRight(&PLAYER.CAM)) * 0.5f).V();
     }
 
-    if(IsKeyDown(KEY_E) && Spectator)
-    {
-        PLAYER.pos.y += 0.2;
-        PLAYER.oldpos.y += 0.2;
-        PLAYER.CAM.target.y += 0.2;
-    }
-
     if(IsKeyDown(KEY_LEFT_SHIFT) && Spectator)
     {
-        PLAYER.pos.y -= 0.2;
-        PLAYER.oldpos.y -= 0.2;
-        PLAYER.CAM.target.y -= 0.2;
+        PLAYER.pos.y -= 0.2f;
+        PLAYER.oldpos.y -= 0.2f;
+        PLAYER.CAM.target.y -= 0.2f;
     }
 
     // For Spectator
@@ -91,19 +89,64 @@ void Loop(void)
         }
     }
 
+
+
+    int scrollDelta = (int) roundf(GetMouseWheelMove());
+    
+    if(inventory.selection == 0 && scrollDelta > 0)
+    {
+        inventory.selection = 8;
+    }
+
+    else
+    {
+        inventory.selection -= scrollDelta;
+
+        if(inventory.selection > 8)
+        {
+            inventory.selection = 0;
+        }
+    }
+
+    if(IsKeyPressed(49)) inventory.selection = 0;
+    if(IsKeyPressed(50)) inventory.selection = 1;
+    if(IsKeyPressed(51)) inventory.selection = 2;
+    if(IsKeyPressed(52)) inventory.selection = 3;
+    if(IsKeyPressed(53)) inventory.selection = 4;
+    if(IsKeyPressed(54)) inventory.selection = 5;
+    if(IsKeyPressed(55)) inventory.selection = 6;
+    if(IsKeyPressed(56)) inventory.selection = 7;
+    if(IsKeyPressed(57)) inventory.selection = 8;
+
+
+
+    // Getting out of track and implementing physics
+
     PLAYER.OnGround = false;
-    for(uint16_t i = 0; i < MAXCUBE; i ++)
+    for(uint16_t i = 0; i < BlocksLength; i ++)
     {
         PLAYER.solveCollision(cubes[i], Spectator);
     }
     
 
     Vector3 Direction = ((normalized3(RVEC3({ Forward.x + Right.x, 1.0f, Forward.z + Right.z }))) * PLAYER.SPEED).V();
+
     PLAYER.pos = (float3) { PLAYER.pos.x + Direction.x, PLAYER.pos.y, PLAYER.pos.z + Direction.z };
 
-    if(PLAYER.OnGround && IsKeyDown(KEY_SPACE))
+    // Back to controls
+
+    if(IsKeyDown(KEY_SPACE))
     {
-        PLAYER.accelerate((float3) { 0.0f, 0.75f, 0.0f });
+        if(Spectator)
+        {
+            PLAYER.pos.y += 0.2f;
+            PLAYER.oldpos.y += 0.2f;
+            PLAYER.CAM.target.y += 0.2f;
+        }
+        else if(PLAYER.OnGround)
+        {
+            PLAYER.accelerate((float3) { 0.0f, 0.75f, 0.0f });
+        }
     }
 
     PLAYER.CAM.target = (Vector3) { PLAYER.CAM.target.x + Direction.x, PLAYER.CAM.target.y, PLAYER.CAM.target.z + Direction.z };
@@ -118,7 +161,7 @@ void Loop(void)
 
 void Renderloop(void)
 {
-    for(uint16_t i = 0; i < MAXCUBE; i ++)
+    for(uint16_t i = 0; i < BlocksLength; i ++)
     {
         cubes[i].RenderProjection();
     }
@@ -126,8 +169,8 @@ void Renderloop(void)
     float3 FocusPoint = (float3) { floorf(Bound.point.x), floorf(Bound.point.y), floorf(Bound.point.z) };
 
     BoundingBox bound = {
-        (Vector3) { FocusPoint.x - 0.52f, FocusPoint.y - 0.52f, FocusPoint.z - 0.52f},
-        (Vector3) { FocusPoint.x + 0.52f, FocusPoint.y + 0.52f, FocusPoint.z + 0.52f}
+        (Vector3) { FocusPoint.x - 0.505f, FocusPoint.y - 0.505f, FocusPoint.z - 0.505f},
+        (Vector3) { FocusPoint.x + 0.505f, FocusPoint.y + 0.505f, FocusPoint.z + 0.505f}
     };
 
     FocusPoint += RVEC3(Bound.normal);
@@ -136,11 +179,18 @@ void Renderloop(void)
     {
         DrawBoundingBox(bound, WHITE);
 
-        if(IsMouseButtonPressed(1))
+        if(IsMouseButtonPressed(1) && BlocksLength < MAXCUBE - 1 && !CheckCollisionBoxes(PLAYER.GetBoundingBox(), (BoundingBox) { (FocusPoint - 0.5f).V(), (FocusPoint + 0.5f).V() }))
         {
             cubes[BlocksLength].pos = FocusPoint;
-            cubes[BlocksLength].color = (float3) { 127.0f, 127.0f, 127.0f };
-            BlocksLength ++;
+
+            BLOCKDATA BlockPlacementData = inventory.GetBlockData(inventory.selection);
+
+            if(BlockPlacementData.ID != 0)
+            {
+                cubes[BlocksLength].color = BlockPlacementData.Color;
+
+                BlocksLength ++;
+            }
         }
         if(IsMouseButtonPressed(0))
         {
@@ -148,11 +198,10 @@ void Renderloop(void)
             {
                 if(cubes[i].pos.x == floor(Bound.point.x) && cubes[i].pos.y == floor(Bound.point.y) && cubes[i].pos.z == floor(Bound.point.z))
                 {
-                    std :: cout << "Breaking?" << std :: endl;
                     // Swapping
-                    CUBE A = cubes[BlocksLength];
+                    CUBE A = cubes[BlocksLength - 1];
 
-                    cubes[BlocksLength] = cubes[i];
+                    cubes[BlocksLength - 1] = cubes[i];
                     cubes[i] = A;
 
                     BlocksLength --;
@@ -163,6 +212,6 @@ void Renderloop(void)
     }
 
     // PLAYER.RenderProjection();
-    
+
     DrawGrid(100, 1.0f);
 }
